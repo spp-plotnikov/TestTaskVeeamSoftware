@@ -4,23 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WinServicesManager"
-        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ListView Name="windowsServicesList" ItemsSource="{DynamicResource ResourceKey=services}" >
+        <ListView Name="windowsServicesList" ItemsSource="{Binding Services}" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=DisplayName}" Width="100">DisplayName</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=DisplayName}" Width="200">DisplayName</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Status}">Status</GridViewColumn>
                 </GridView>
             </ListView.View>
-            <ListView.Resources>
-                <col:ArrayList x:Key="services">
-                    <local:WindowsService Name="service1" DisplayName="service1" Status="Stopped" />
-                </col:ArrayList>
-            </ListView.Resources>
         </ListView>
     </Grid>
 </Window>

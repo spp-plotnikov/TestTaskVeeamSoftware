@@ -20,6 +20,7 @@ namespace WinServicesManager
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ServicesViewModel();
         }
     }
 }
