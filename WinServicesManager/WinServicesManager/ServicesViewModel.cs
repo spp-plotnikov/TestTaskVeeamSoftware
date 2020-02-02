@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Management;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +17,50 @@ namespace WinServicesManager
 
         public ServicesViewModel()
         {
-            var services = ServiceController.GetServices().Select(s => new WindowsService 
-            { 
-                Name = s.ServiceName, 
-                DisplayName = s.DisplayName, 
-                Status = s.Status.ToString()
-            });
+            var services = ListAllWindowsServices();
+            //var services = ServiceController.GetServices().Select(s => new WindowsService
+            //{
+            //    Name = s.ServiceName,
+            //    DisplayName = s.DisplayName,
+            //    Status = s.Status.ToString()
+            //});
             Services = new ObservableCollection<WindowsService>(services);
+        }
+
+        private static IEnumerable<WindowsService> ListAllWindowsServices()
+        {
+            ManagementObjectSearcher windowsServicesSearcher = new ManagementObjectSearcher("root\\cimv2", "select * from Win32_Service");
+            ManagementObjectCollection objectCollection = windowsServicesSearcher.Get();
+
+
+            foreach (ManagementObject windowsService in objectCollection)
+            {
+                PropertyDataCollection serviceProperties = windowsService.Properties;
+                var newService = new WindowsService();
+                foreach (PropertyData serviceProperty in serviceProperties)
+                {
+                    if (serviceProperty.Name == "Name")
+                    {
+                        newService.Name = serviceProperty.Value.ToString();
+                    }
+
+                    if (serviceProperty.Name == "DisplayName")
+                    {
+                        newService.DisplayName = serviceProperty.Value.ToString();
+                    }
+
+                    if (serviceProperty.Name == "State")
+                    {
+                        newService.Status = serviceProperty.Value.ToString();
+                    }
+
+                    if (serviceProperty.Name == "StartName")
+                    {
+                        newService.Account = serviceProperty.Value?.ToString();
+                    }
+                }
+                yield return newService;
+            }
         }
     }
 }

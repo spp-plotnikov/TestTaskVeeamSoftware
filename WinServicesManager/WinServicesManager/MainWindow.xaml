@@ -13,6 +13,8 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Name</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=DisplayName}" Width="200">DisplayName</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Status}">Status</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Account}">Account</GridViewColumn>
+
                 </GridView>
             </ListView.View>
         </ListView>
