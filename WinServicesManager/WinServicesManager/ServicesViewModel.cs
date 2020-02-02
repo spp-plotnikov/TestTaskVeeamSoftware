@@ -4,9 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Management;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WinServicesManager
 {
@@ -18,12 +15,6 @@ namespace WinServicesManager
         public ServicesViewModel()
         {
             var services = ListAllWindowsServices();
-            //var services = ServiceController.GetServices().Select(s => new WindowsService
-            //{
-            //    Name = s.ServiceName,
-            //    DisplayName = s.DisplayName,
-            //    Status = s.Status.ToString()
-            //});
             Services = new ObservableCollection<WindowsService>(services);
         }
 
@@ -41,17 +32,17 @@ namespace WinServicesManager
                 {
                     if (serviceProperty.Name == "Name")
                     {
-                        newService.Name = serviceProperty.Value.ToString();
+                        newService.Name = serviceProperty.Value?.ToString();
                     }
 
                     if (serviceProperty.Name == "DisplayName")
                     {
-                        newService.DisplayName = serviceProperty.Value.ToString();
+                        newService.DisplayName = serviceProperty.Value?.ToString();
                     }
 
                     if (serviceProperty.Name == "State")
                     {
-                        newService.Status = serviceProperty.Value.ToString();
+                        newService.Status = serviceProperty.Value?.ToString();
                     }
 
                     if (serviceProperty.Name == "StartName")
