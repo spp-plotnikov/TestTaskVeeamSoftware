@@ -17,14 +17,17 @@
                     <GridViewColumn Header="Management">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel>
-                                    <Button>Stop this service</Button>
-                                </StackPanel>
+                                <Button HorizontalAlignment="Center" HorizontalContentAlignment="Center" Padding="10,2,10,2">Stop this service</Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
 </Window>
