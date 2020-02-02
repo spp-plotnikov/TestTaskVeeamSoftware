@@ -15,13 +15,14 @@ namespace WinServicesManager
 
         public ServicesViewModel()
         {
+            StopService = new DelegateCommand<string>((name) => StopServiceInternal(name));
             var services = ListAllWindowsServices();
             Services = new ObservableCollection<WindowsService>(services);
         }
 
-        public DelegateCommand<string> AddCommand { get; }
+        public DelegateCommand<string> StopService { get; }
 
-        public void StopService(string name)
+        public void StopServiceInternal(string name)
         {
 
         }

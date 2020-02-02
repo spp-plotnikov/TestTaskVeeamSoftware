@@ -19,7 +19,8 @@
                             <DataTemplate>
                                 <Button HorizontalAlignment="Center" HorizontalContentAlignment="Center" Padding="10,2,10,2"
                                         Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                  Path=DataContext.AddCommand}">Stop this service</Button>
+                                                  Path=DataContext.StopService}"
+                                        CommandParameter="{Binding Path=Name}">Stop this service</Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
