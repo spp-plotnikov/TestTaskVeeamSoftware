@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.PlatformUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -16,6 +17,13 @@ namespace WinServicesManager
         {
             var services = ListAllWindowsServices();
             Services = new ObservableCollection<WindowsService>(services);
+        }
+
+        public DelegateCommand<string> AddCommand { get; }
+
+        public void StopService(string name)
+        {
+
         }
 
         private static IEnumerable<WindowsService> ListAllWindowsServices()

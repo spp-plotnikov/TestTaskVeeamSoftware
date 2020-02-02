@@ -22,5 +22,13 @@ namespace WinServicesManager
             InitializeComponent();
             DataContext = new ServicesViewModel();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var service = button.DataContext as WindowsService;
+            var viewModel = DataContext as ServicesViewModel;
+            viewModel.StopService(service.Name);
+        }
     }
 }
