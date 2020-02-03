@@ -21,6 +21,12 @@ namespace WinServicesManager
         {
             InitializeComponent();
             DataContext = new ServicesViewModel();
+            Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
+        }
+
+        private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
+        {
+            ((IDisposable)DataContext).Dispose();
         }
     }
 }

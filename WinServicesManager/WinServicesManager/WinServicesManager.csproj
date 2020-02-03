@@ -152,6 +152,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ServicesModel.cs" />
     <Compile Include="ServicesViewModel.cs" />
     <Compile Include="WindowsService.cs" />
     <Page Include="MainWindow.xaml">
