@@ -9,12 +9,11 @@ namespace WinServicesManager
 {
     class ServicesModel : IDisposable
     {
-        private bool shouldContinueUpdating = true;
         private Thread backgroundUpdater = null;
         private static readonly object locker = new object();
         private List<WindowsService> windowsServicesUpdated = new List<WindowsService>();
 
-        public bool IsUpdating => shouldContinueUpdating;
+        public bool IsUpdating { get; private set; } = true;
 
         public List<WindowsService> WindowsServices 
         { 
@@ -63,7 +62,7 @@ namespace WinServicesManager
 
         private void UpdateServices()
         {
-            while (shouldContinueUpdating)
+            while (IsUpdating)
             {
                 var updatedServices = ListAllWindowsServices().ToList(); // possible long operation
 
@@ -78,7 +77,7 @@ namespace WinServicesManager
         
         public void StartUpdating()
         {
-            shouldContinueUpdating = true;
+            IsUpdating = true;
             if (backgroundUpdater != null) return;
 
             backgroundUpdater = new Thread(UpdateServices)
@@ -90,7 +89,7 @@ namespace WinServicesManager
 
         public void StopUpdating()
         {
-            shouldContinueUpdating = false;
+            IsUpdating = false;
             backgroundUpdater?.Join();
             backgroundUpdater = null;
         }

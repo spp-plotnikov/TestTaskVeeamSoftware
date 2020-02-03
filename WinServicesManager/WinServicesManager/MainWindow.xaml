@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WinServicesManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="S P P  WinServicesManager 1.0 Beta" Height="450" Width="800">
 
     <DockPanel>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
