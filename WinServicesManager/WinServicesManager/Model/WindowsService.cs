@@ -2,6 +2,9 @@
 
 namespace WinServicesManager
 {
+    /// <summary>
+    /// A model for representing one service
+    /// </summary>
     public class WindowsService
     {
         public string Name { get; set; }

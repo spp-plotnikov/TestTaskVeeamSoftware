@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace WinServicesManager
 {
+    /// <summary>
+    /// A model for representing all services. It is periodically updated from the OS.
+    /// </summary>
     public class ServicesModel : IDisposable
     {
         private const int UpdatingMillisecondsPeriod = 300;

@@ -4,6 +4,9 @@ using System.Management;
 
 namespace WinServicesManager
 {
+    /// <summary>
+    /// Provides services using WMI
+    /// </summary>
     class WinServicesProvider : IWinServicesProvider
     {
         private const string Scope = "root\\cimv2";

@@ -6,6 +6,9 @@ using System.Windows.Threading;
 
 namespace WinServicesManager
 {
+    /// <summary>
+    /// ViewModel. Gets the data from the model and binds it to the view.
+    /// </summary>
     class ServicesViewModel : INotifyPropertyChanged, IDisposable
     {
         private const int UpdatingMillisecondsPeriod = 300;
