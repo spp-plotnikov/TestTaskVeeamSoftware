@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualStudio.PlatformUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Management;
-using System.Threading;
 using System.Windows.Threading;
 
 namespace WinServicesManager
@@ -20,6 +16,7 @@ namespace WinServicesManager
         public ServicesViewModel()
         {
             StopService = new DelegateCommand<string>((name) => StopServiceInternal(name));
+            StartService = new DelegateCommand<string>((name) => StartServiceInternal(name));
 
             var dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -29,18 +26,34 @@ namespace WinServicesManager
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            Services.Clear();
-            model.WindowsServices.ForEach(s => Services.Add(s));
+            var updated = model.WindowsServices;
+            if (Services.Count == updated.Count)
+            {
+                for (int i = 0; i < updated.Count; i++)
+                {
+                    Services[i] = updated[i];
+                }
+            }
+            else
+            {
+                Services.Clear();
+                updated.ForEach(s => Services.Add(s));
+            }
         }
 
-
         public DelegateCommand<string> StopService { get; }
+        public DelegateCommand<string> StartService { get; }
+
 
         private void StopServiceInternal(string name)
         {
+            model.StopService(name);
         }
 
-
+        private void StartServiceInternal(string name)
+        {
+            model.StopService(name);
+        }
 
         public void Dispose()
         {

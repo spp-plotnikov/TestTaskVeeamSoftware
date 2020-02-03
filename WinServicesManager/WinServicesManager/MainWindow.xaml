@@ -18,9 +18,22 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Button HorizontalAlignment="Center" HorizontalContentAlignment="Center" Padding="10,2,10,2"
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                                  Path=DataContext.StopService}"
-                                        CommandParameter="{Binding Path=Name}">Stop this service</Button>
+                                        CommandParameter="{Binding Path=Name}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Content" Value="Stop this service"/>
+                                            <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                                                  Path=DataContext.StopService}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsStopped}" Value="True">
+                                                    <Setter Property="Content" Value="Start this service"/>
+                                                    <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                                                  Path=DataContext.StartService}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

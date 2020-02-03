@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,12 @@ namespace WinServicesManager
                 IsBackground = true
             };
             backgroundUpdater.Start();
+        }
+
+        public void StopService(string name)
+        {
+            var service = new ServiceController(name);
+            service.Stop();
         }
 
         private void UpdateServices()
@@ -81,6 +88,8 @@ namespace WinServicesManager
                     {
                         newService.Account = serviceProperty.Value?.ToString();
                     }
+
+                    newService.IsStopped = newService.Status == "Stopped";
                 }
                 yield return newService;
             }
