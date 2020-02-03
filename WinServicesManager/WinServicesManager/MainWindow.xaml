@@ -8,10 +8,23 @@
         Title="MainWindow" Height="450" Width="800">
 
     <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <TextBlock Name="lblCursorPosition" />
-            </StatusBarItem>
+        <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
+            <Grid Width="{Binding Path=ActualWidth, ElementName=statusBar}">
+                <Button HorizontalAlignment="Center" HorizontalContentAlignment="Center" Padding="10,2,10,2">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Content" Value="Resume updating"/>
+                            <Setter Property="Command" Value="{Binding StartUpdating}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsUpdating}" Value="True">
+                                    <Setter Property="Content" Value="Stop updating"/>
+                                    <Setter Property="Command" Value="{Binding StopUpdating}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </StatusBar>
         <ListView Name="windowsServicesList" ItemsSource="{Binding Services}" >
             <ListView.View>

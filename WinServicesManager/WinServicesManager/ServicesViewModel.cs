@@ -18,6 +18,8 @@ namespace WinServicesManager
         {
             StopService = new DelegateCommand<string>((name) => StopServiceInternal(name));
             StartService = new DelegateCommand<string>((name) => StartServiceInternal(name));
+            StopUpdating = new DelegateCommand(() => StopUpdatingInternal());
+            StartUpdating = new DelegateCommand(() => StartUpdatingInternal());
 
             var dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(UpdateCollectionOfServices);
@@ -44,6 +46,10 @@ namespace WinServicesManager
 
         public DelegateCommand<string> StopService { get; }
         public DelegateCommand<string> StartService { get; }
+        public DelegateCommand StopUpdating { get; }
+        public DelegateCommand StartUpdating { get; }
+
+        public bool IsUpdating => model.IsUpdating;
 
 
         private void StopServiceInternal(string name)
@@ -54,6 +60,18 @@ namespace WinServicesManager
         private void StartServiceInternal(string name)
         {
             model.StartService(name);
+        }
+
+        private void StopUpdatingInternal()
+        {
+            model.StopUpdating();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUpdating)));
+        }
+
+        private void StartUpdatingInternal()
+        {
+            model.StartUpdating();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUpdating)));
         }
 
         public void Dispose()

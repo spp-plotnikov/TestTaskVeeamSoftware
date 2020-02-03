@@ -14,6 +14,8 @@ namespace WinServicesManager
         private static readonly object locker = new object();
         private List<WindowsService> windowsServicesUpdated = new List<WindowsService>();
 
+        public bool IsUpdating => shouldContinueUpdating;
+
         public List<WindowsService> WindowsServices 
         { 
             get
@@ -27,11 +29,7 @@ namespace WinServicesManager
 
         public ServicesModel()
         {
-            backgroundUpdater = new Thread(UpdateServices)
-            {
-                IsBackground = true
-            };
-            backgroundUpdater.Start();
+            StartUpdating();
         }
 
         public void StopService(string name)
@@ -77,6 +75,25 @@ namespace WinServicesManager
                 Thread.Sleep(300);
             }
         }
+        
+        public void StartUpdating()
+        {
+            shouldContinueUpdating = true;
+            if (backgroundUpdater != null) return;
+
+            backgroundUpdater = new Thread(UpdateServices)
+            {
+                IsBackground = true
+            };
+            backgroundUpdater.Start();
+        }
+
+        public void StopUpdating()
+        {
+            shouldContinueUpdating = false;
+            backgroundUpdater?.Join();
+            backgroundUpdater = null;
+        }
 
         private static IEnumerable<WindowsService> ListAllWindowsServices()
         {
@@ -116,8 +133,7 @@ namespace WinServicesManager
 
         public void Dispose()
         {
-            shouldContinueUpdating = false;
-            backgroundUpdater.Join();
+            StopUpdating();
         }
     }
 }
