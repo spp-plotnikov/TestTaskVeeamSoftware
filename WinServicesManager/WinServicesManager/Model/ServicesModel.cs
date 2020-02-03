@@ -8,9 +8,11 @@ namespace WinServicesManager
 {
     public class ServicesModel : IDisposable
     {
-        IWinServicesProvider provider = null;
+        private const int UpdatingMillisecondsPeriod = 300;
+
         private Thread backgroundUpdater = null;
         private static readonly object locker = new object();
+        private readonly IWinServicesProvider provider = null;
         private List<WindowsService> windowsServicesUpdated = new List<WindowsService>();
 
         public bool IsUpdating { get; private set; } = true;
@@ -65,14 +67,21 @@ namespace WinServicesManager
         {
             while (IsUpdating)
             {
-                var updatedServices = provider.ListAllWindowsServices().ToList(); // possible long operation
-
-                lock (locker)
+                try
                 {
-                    windowsServicesUpdated = updatedServices;
+                    var updatedServices = provider.ListAllWindowsServices().ToList(); // possible long operation
+
+                    lock (locker)
+                    {
+                        windowsServicesUpdated = updatedServices;
+                    }
+                }
+                catch
+                {
+                    // some logging here
                 }
 
-                Thread.Sleep(300);
+                Thread.Sleep(UpdatingMillisecondsPeriod);
             }
         }
         

@@ -8,6 +8,8 @@ namespace WinServicesManager
 {
     class ServicesViewModel : INotifyPropertyChanged, IDisposable
     {
+        private const int UpdatingMillisecondsPeriod = 300;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<WindowsService> Services { get; set; } = new ObservableCollection<WindowsService>();
 
@@ -22,7 +24,7 @@ namespace WinServicesManager
             StartUpdating = new DelegateCommand(() => StartUpdatingInternal());
 
             timer.Tick += new EventHandler(UpdateCollectionOfServices);
-            timer.Interval = TimeSpan.FromMilliseconds(300);
+            timer.Interval = TimeSpan.FromMilliseconds(UpdatingMillisecondsPeriod);
             timer.Start();
         }
 
