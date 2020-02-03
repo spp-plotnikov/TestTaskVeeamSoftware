@@ -6,12 +6,15 @@ namespace WinServicesManager
 {
     class WinServicesProvider : IWinServicesProvider
     {
+        private const string Scope = "root\\cimv2";
+        private const string AllServicesQuery = "select * from Win32_Service";
+
         public IEnumerable<WindowsService> ListAllWindowsServices()
         {
-            ManagementObjectSearcher windowsServicesSearcher = new ManagementObjectSearcher("root\\cimv2", "select * from Win32_Service");
+            ManagementObjectSearcher windowsServicesSearcher = new ManagementObjectSearcher(Scope, AllServicesQuery);
             ManagementObjectCollection objectCollection = windowsServicesSearcher.Get();
 
-
+            // https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-baseservice#members
             foreach (ManagementObject windowsService in objectCollection)
             {
                 PropertyDataCollection serviceProperties = windowsService.Properties;
