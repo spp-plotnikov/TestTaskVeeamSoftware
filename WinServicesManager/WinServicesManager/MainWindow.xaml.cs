@@ -17,16 +17,19 @@ namespace WinServicesManager
 {
     public partial class MainWindow : Window
     {
+        private IDisposable disposableViewModel = null;
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ServicesViewModel();
+            disposableViewModel = new ServicesViewModel();
+            DataContext = disposableViewModel;
             Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
         }
 
         private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
         {
-            ((IDisposable)DataContext).Dispose();
+            disposableViewModel.Dispose();
+            disposableViewModel = null;
         }
     }
 }

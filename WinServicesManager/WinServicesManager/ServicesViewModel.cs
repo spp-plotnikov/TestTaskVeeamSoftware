@@ -2,7 +2,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Threading;
 
 namespace WinServicesManager
@@ -13,6 +12,7 @@ namespace WinServicesManager
         public ObservableCollection<WindowsService> Services { get; set; } = new ObservableCollection<WindowsService>();
 
         private readonly ServicesModel model = new ServicesModel();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public ServicesViewModel()
         {
@@ -21,10 +21,9 @@ namespace WinServicesManager
             StopUpdating = new DelegateCommand(() => StopUpdatingInternal());
             StartUpdating = new DelegateCommand(() => StartUpdatingInternal());
 
-            var dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(UpdateCollectionOfServices);
-            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(300);
-            dispatcherTimer.Start();
+            timer.Tick += new EventHandler(UpdateCollectionOfServices);
+            timer.Interval = TimeSpan.FromMilliseconds(300);
+            timer.Start();
         }
 
         private void UpdateCollectionOfServices(object sender, EventArgs e)
@@ -65,12 +64,14 @@ namespace WinServicesManager
         private void StopUpdatingInternal()
         {
             model.StopUpdating();
+            timer.Stop();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUpdating)));
         }
 
         private void StartUpdatingInternal()
         {
             model.StartUpdating();
+            timer.Start();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUpdating)));
         }
 
