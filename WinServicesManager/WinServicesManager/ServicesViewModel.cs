@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Threading;
 
 namespace WinServicesManager
@@ -19,12 +20,12 @@ namespace WinServicesManager
             StartService = new DelegateCommand<string>((name) => StartServiceInternal(name));
 
             var dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Tick += new EventHandler(UpdateCollectionOfServices);
             dispatcherTimer.Interval = TimeSpan.FromMilliseconds(300);
             dispatcherTimer.Start();
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void UpdateCollectionOfServices(object sender, EventArgs e)
         {
             var updated = model.WindowsServices;
             if (Services.Count == updated.Count)
@@ -52,7 +53,7 @@ namespace WinServicesManager
 
         private void StartServiceInternal(string name)
         {
-            model.StopService(name);
+            model.StartService(name);
         }
 
         public void Dispose()

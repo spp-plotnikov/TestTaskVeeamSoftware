@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WinServicesManager
 {
@@ -38,8 +36,31 @@ namespace WinServicesManager
 
         public void StopService(string name)
         {
-            var service = new ServiceController(name);
-            service.Stop();
+            try
+            {
+                var service = new ServiceController(name);
+                if (service.CanStop)
+                {
+                    service.Stop(); // fast operation, so no need run in separate thread
+                }
+            }
+            catch
+            {
+                // some logging here
+            }
+        }
+
+        public void StartService(string name)
+        {
+            try
+            {
+                var service = new ServiceController(name);
+                service.Start(); // fast operation, so no need run in separate thread
+            }
+            catch
+            {
+                // some logging here
+            }
         }
 
         private void UpdateServices()
@@ -88,8 +109,6 @@ namespace WinServicesManager
                     {
                         newService.Account = serviceProperty.Value?.ToString();
                     }
-
-                    newService.IsStopped = newService.Status == "Stopped";
                 }
                 yield return newService;
             }

@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:WinServicesManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblCursorPosition" />
+            </StatusBarItem>
+        </StatusBar>
         <ListView Name="windowsServicesList" ItemsSource="{Binding Services}" >
             <ListView.View>
                 <GridView>
@@ -45,5 +51,5 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-    </Grid>
+    </DockPanel>
 </Window>
