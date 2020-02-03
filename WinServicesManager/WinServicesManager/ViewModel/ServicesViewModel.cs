@@ -11,7 +11,7 @@ namespace WinServicesManager
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<WindowsService> Services { get; set; } = new ObservableCollection<WindowsService>();
 
-        private readonly ServicesModel model = new ServicesModel();
+        private readonly ServicesModel model = new ServicesModel(new WinServicesProvider());
         private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public ServicesViewModel()
