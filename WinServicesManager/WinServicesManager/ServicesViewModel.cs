@@ -15,40 +15,54 @@ namespace WinServicesManager
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<WindowsService> Services { get; set; }
 
-        private readonly Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+        List<WindowsService> WindowsServicesUpdated = null;
 
         static readonly object locker = new object();
+        bool shouldContinueUpdate = true;
+        Thread backgroundUpdater = null;
 
-        private bool shouldContinueUpdating = true;
-        readonly Thread backgroundUpdater = null;
+        SynchronizationContext synchronizationContext = SynchronizationContext.Current;
 
         public ServicesViewModel()
         {
             StopService = new DelegateCommand<string>((name) => StopServiceInternal(name));
-            var services = ListAllWindowsServices();
-            Services = new ObservableCollection<WindowsService>(services);
-            backgroundUpdater = new Thread(UpdateCollection);
-            backgroundUpdater.IsBackground = true;
+            //var services = ListAllWindowsServices();
+            WindowsServicesUpdated = new List<WindowsService>();
+            Services = new ObservableCollection<WindowsService>();
+            var dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(300);
+            dispatcherTimer.Start();
+
+            backgroundUpdater = new Thread(UpdateCollection)
+            {
+                IsBackground = true
+            };
             backgroundUpdater.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            lock (locker)
+            {
+                Services.Clear();
+                WindowsServicesUpdated.ForEach(s => Services.Add(s));
+            }
         }
 
         private void UpdateCollection()
         {
-            while (shouldContinueUpdating)
+            while (shouldContinueUpdate)
             {
                 var updatedServices = ListAllWindowsServices().ToList();
-                dispatcher.Invoke(() =>
+
+                lock (locker)
                 {
-                    lock (locker)
-                    {
-                        Services.Clear();
-                        updatedServices.ForEach(s => Services.Add(s));
-                    }
-                });
+                    WindowsServicesUpdated = updatedServices;
+                }
 
-                Thread.Sleep(500);
+                Thread.Sleep(300);
             }
-
         }
 
         public DelegateCommand<string> StopService { get; }
@@ -96,7 +110,7 @@ namespace WinServicesManager
 
         public void Dispose()
         {
-            shouldContinueUpdating = false;
+            shouldContinueUpdate = false;
             backgroundUpdater.Join();
         }
     }
