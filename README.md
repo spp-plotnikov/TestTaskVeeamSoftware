@@ -4,4 +4,5 @@ This WPF-app shows a list of Windows services. You can see the following propert
 
 ## Ideas for Further Improvements
 
-Using `System.ComponentModel.BackgroundWorker` instead of `Thread` and getting rid of two timers (in Model and in ViewModel).
+* Using `System.ComponentModel.BackgroundWorker` instead of `Thread` and getting rid of two timers (in Model and in ViewModel).
+* Temporarily disabling pressed buttons to prevent errors due to repeated click (waiting until a service called to be stopped will be really stopped).
