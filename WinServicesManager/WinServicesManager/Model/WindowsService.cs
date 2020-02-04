@@ -12,6 +12,5 @@ namespace WinServicesManager
         public string Status { get; set; }
         public string Account { get; set; }
         public bool IsStopped => Status == "Stopped";
-        public bool CanBeManaged => IsStopped || Status == "Running";
     }
 }
